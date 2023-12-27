@@ -1,0 +1,14 @@
+{
+  "name": "cypress-automation-js-template",
+  "version": "1.0.0",
+  "description": "This is a template to start an automation framework with Cypress",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Lien Ngo",
+  "license": "ISC",
+  "devDependencies": {
+    "cypress": "^13.6.1"
+  }
+}
