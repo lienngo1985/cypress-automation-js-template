@@ -40,9 +40,9 @@ const getAllFiles = (dirPath, arrayOfFiles = []) => {
   return arrayOfFiles;
 };
 
-module.exports = { getAllFiles };
+//module.exports = { getAllFiles };
 
 //console.log(getAllFiles('cypress/e2e/1-getting-started'));
 
-//const specs = getAllFiles('cypress/e2e/2-advanced-examples');
-//process.stdout.write(`${JSON.stringify(specs)}\n`);
+const specs = getAllFiles('cypress/e2e/1-getting-started');
+process.stdout.write(`${JSON.stringify(specs)}\n`);
