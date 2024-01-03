@@ -52,10 +52,9 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           record: false
-          headless: true
+          headed: true
           browser: ${{ matrix.browser }}
           config: ${{ matrix.config.config }}
           spec: ${{ matrix.specs }}
-          env: testingScope=${{ env.testingScope }}
           
 #https://dev.to/pthapa1/how-to-run-cypress-tests-in-parallel-in-github-actions-40pj
