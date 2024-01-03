@@ -5,13 +5,12 @@ on:
     # run every 15 min
     #- cron:  '*/15 2-9 * * 1-5'
   #push:
-   # branches: [ clacue/run-e2e-1min ]
+   # branches: [ lngo/run-e2e-1min ]
 
 env:
   testingScope: e2e
   runningEnv: todo #commands (int / prod / preprod)
   currenTest: 1-getting-started
-
 
 jobs:
   initTest:
@@ -19,25 +18,21 @@ jobs:
     outputs:
       specConfig: ${{ steps.configVar.outputs.specConfig }}
       matrix: ${{ steps.readSpectoMatrix.outputs.matrix }}
-
     steps:
       - id: configVar
         run: |
           echo "name=specConfig::video=false,baseUrl=https://example.cypress.io/${{ env.runningEnv }}" >> $GITHUB_OUTPUT  
         shell: bash
-
-      - name: Debug - List Files
-        run: ls -R
-      
+      - uses: actions/checkout@v4
       # Step to run the JavaScript script to read the Cypress specs matrix
-      - name: Read Specto Matrix
+      - name: Read Spec to Matrix
         id: readSpectoMatrix
         run: node /home/runner/work/cypress-automation-js-template/scripts/readSpectoMatrix.js
         env:
           TEST_PATH: 'cypress/${{ env.testingScope }}/${{ env.currenTest }}'
 
   e2e-run:
-    timeout-minutes: 15
+    timeout-minutes: 10
     needs: [initTest]
     runs-on: ubuntu-latest
     strategy:
