@@ -27,7 +27,7 @@ jobs:
       # Step to run the JavaScript script to read the Cypress specs matrix
       - name: Read Spec to Matrix
         id: readSpectoMatrix
-        run: node /home/runner/work/cypress-automation-js-template/scripts/readSpectoMatrix.js
+        run: node scripts/readSpectoMatrix.js
         env:
           TEST_PATH: 'cypress/${{ env.testingScope }}/${{ env.currenTest }}'
 
