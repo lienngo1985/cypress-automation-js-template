@@ -15,7 +15,7 @@ env:
 
 jobs:
   initTest:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     outputs:
       specConfig: ${{ steps.configVar.outputs.specConfig }}
       matrix: ${{ steps.readSpectoMatrix.outputs.matrix }}
@@ -36,7 +36,7 @@ jobs:
   e2e-run:
     timeout-minutes: 15
     needs: [initTest]
-    runs-on: [self-hosted, linux, x64]
+    runs-on: ubuntu-latest
     strategy:
       matrix:  ${{ fromJSON(needs.initTest.outputs.matrix) }}
       fail-fast: false
