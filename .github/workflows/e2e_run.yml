@@ -1,4 +1,4 @@
-name: Live-run E2E
+name: E2E Run
 on:
   workflow_dispatch:
   #schedule:
