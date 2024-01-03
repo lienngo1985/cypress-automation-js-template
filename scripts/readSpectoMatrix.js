@@ -40,7 +40,7 @@ const getAllFiles = (dirPath, arrayOfFiles = []) => {
   return arrayOfFiles;
 };
 
-module.exports = { readSpectoMatrix };
+module.exports = { getAllFiles };
 
 //console.log(getAllFiles('cypress/e2e/1-getting-started'));
 
