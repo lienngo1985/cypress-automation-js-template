@@ -1,0 +1,58 @@
+name: Live-run E2E
+on:
+  workflow_dispatch:
+  #schedule:
+    # run every 15 min
+    #- cron:  '*/15 2-9 * * 1-5'
+  #push:
+   # branches: [ clacue/run-e2e-1min ]
+
+env:
+  testingScope: e2e
+  runningEnv: todo #commands (int / prod / preprod)
+  currenTest: 1-getting-started
+
+
+jobs:
+  initTest:
+    runs-on: self-hosted
+    outputs:
+      specConfig: ${{ steps.configVar.outputs.specConfig }}
+      matrix: ${{ steps.readSpectoMatrix.outputs.matrix }}
+
+    steps:
+      - id: configVar
+        run: |
+          echo "::set-output name=specConfig::video=false,baseUrl=https://example.cypress.io/${{ env.runningEnv }}"   
+        shell: bash
+      
+      # Step to run the JavaScript script to read the Cypress specs matrix
+      - name: Read Specto Matrix
+        id: readSpectoMatrix
+        run: node scripts/readSpectoMatrix.js
+        env:
+          TEST_PATH: 'cypress/${{ env.testingScope }}/${{ env.currenTest }}'
+
+  e2e-run:
+    timeout-minutes: 15
+    needs: [initTest]
+    runs-on: [self-hosted, linux, x64]
+    strategy:
+      matrix:  ${{ fromJSON(needs.initTest.outputs.matrix) }}
+      fail-fast: false
+    env:
+      specConfig: ${{ needs.initTest.outputs.specConfig }}
+    container: cypress/browsers:node16.5.0-chrome94-ff93
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          record: false
+          headless: true
+          browser: chrome
+          spec: ${{ matrix.specs.spec}}
+          env: testingScope=${{ env.testingScope }}
+          config: ${{ env.specConfig }}
+          
