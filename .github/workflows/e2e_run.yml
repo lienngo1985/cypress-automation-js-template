@@ -25,6 +25,9 @@ jobs:
         run: |
           echo "name=specConfig::video=false,baseUrl=https://example.cypress.io/${{ env.runningEnv }}" >> $GITHUB_OUTPUT  
         shell: bash
+
+      - name: Debug - List Files
+        run: ls -R
       
       # Step to run the JavaScript script to read the Cypress specs matrix
       - name: Read Specto Matrix
