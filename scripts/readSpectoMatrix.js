@@ -1,6 +1,6 @@
 
 // scripts/readSpectoMatrix.js
-const fs = require('fs');
+/*const fs = require('fs');
 
 function readSpectoMatrix(testPath) {
   const files = fs.readdirSync(testPath);
@@ -20,4 +20,29 @@ function readSpectoMatrix(testPath) {
   return matrix;
 }
 
+//module.exports = { readSpectoMatrix };
+
+console.log(readSpectoMatrix('cypress/e2e/1-getting-started'));
+*/
+
+const fs = require('fs');
+const path = require('path');
+const getAllFiles = (dirPath, arrayOfFiles = []) => {
+  const files = fs.readdirSync(dirPath, { withFileTypes: true });
+
+  files.forEach((file) => {
+    if (file.isDirectory()) {
+      arrayOfFiles = getAllFiles(`${dirPath}/${file.name}`, arrayOfFiles);
+    } else {
+      arrayOfFiles.push(`${path.join(dirPath, '/', file.name)}`);
+    }
+  });
+  return arrayOfFiles;
+};
+
 module.exports = { readSpectoMatrix };
+
+//console.log(getAllFiles('cypress/e2e/1-getting-started'));
+
+//const specs = getAllFiles('cypress/e2e/2-advanced-examples');
+//process.stdout.write(`${JSON.stringify(specs)}\n`);
