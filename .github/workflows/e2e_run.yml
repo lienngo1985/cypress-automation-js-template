@@ -23,7 +23,7 @@ jobs:
     steps:
       - id: configVar
         run: |
-          echo "::set-output name=specConfig::video=false,baseUrl=https://example.cypress.io/${{ env.runningEnv }}"   
+          echo "name=specConfig::video=false,baseUrl=https://example.cypress.io/${{ env.runningEnv }}" >> $GITHUB_OUTPUT  
         shell: bash
       
       # Step to run the JavaScript script to read the Cypress specs matrix
