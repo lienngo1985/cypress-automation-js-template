@@ -43,7 +43,7 @@ jobs:
         browser: [chrome]
         specs: ${{ fromJson(needs.build-cypress-matrix.outputs.specs) }}
     
-    #container: cypress/browsers:node16.5.0-chrome94-ff93
+    container: cypress/browsers:node16.5.0-chrome94-ff93
     
     steps:
       - name: Checkout
