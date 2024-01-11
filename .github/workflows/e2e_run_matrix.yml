@@ -9,7 +9,7 @@ on:
 
 env:
   testingScope: e2e
-  runningEnv: staging #commands (int / prod / preprod)
+  runningEnv: staging
   currenTest: 1-getting-started
 
 jobs:
