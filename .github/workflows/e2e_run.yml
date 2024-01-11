@@ -1,4 +1,4 @@
-name: E2E Run
+name: E2E_Run_With_Matrix
 on:
   workflow_dispatch:
   #schedule:
@@ -9,7 +9,7 @@ on:
 
 env:
   testingScope: e2e
-  runningEnv: todo #commands (int / prod / preprod)
+  runningEnv: staging #commands (int / prod / preprod)
   currenTest: 1-getting-started
 
 jobs:
