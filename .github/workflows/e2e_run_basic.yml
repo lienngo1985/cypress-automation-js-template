@@ -2,11 +2,20 @@ name: E2E_Run_Basic
 
 on:
   workflow_dispatch:
+    inputs:
+      currentTest: 
+        description: 'Specify the current test you want to run'
+        default: '2-advanced-examples' 
+        type: choice
+        required: true 
+        options:
+        - 1-getting-started
+        - 2-advanced-examples
 
 env:
   testingScope: e2e
   #runningEnv: staging
-  currenTest: 2-advanced-examples
+  currenTest: ${{ github.event.inputs.currentTest }}
 
 jobs:
   cypress-tests:
