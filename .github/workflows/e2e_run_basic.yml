@@ -23,5 +23,5 @@ jobs:
           record: false
           headed: true
           browser: chrome
-          spec: cypress/e2e/1-getting-started
+          spec: cypress/e2e/${{ env.currenTest }}
 
