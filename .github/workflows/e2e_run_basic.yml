@@ -3,18 +3,25 @@ name: Cypress E2E Tests
 on:
   workflow_dispatch:
 
+env:
+  testingScope: e2e
+  #runningEnv: staging
+  currenTest: 1-getting-started
+
 jobs:
   cypress-tests:
+    timeout-minutes: 10
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Install Dependencies
-        run: |
-          npm install
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          record: false
+          headed: true
+          browser: chrome
+          spec: cypress/e2e/1-getting-started
 
-      - name: Run Cypress Tests
-        run: |
-          npx cypress run --headless
