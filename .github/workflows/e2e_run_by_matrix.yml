@@ -1,6 +1,15 @@
 name: E2E_Run_By_Matrix
 on:
   workflow_dispatch:
+    inputs:
+      currentTest: 
+        description: 'Specify the current test you want to run'
+        default: '2-advanced-examples' 
+        type: choice
+        required: true 
+        options:
+        - 1-getting-started
+        - 2-advanced-examples
   #schedule:
     # run every 15 min
     #- cron:  '*/15 2-9 * * 1-5'
@@ -10,7 +19,7 @@ on:
 env:
   testingScope: e2e
   #runningEnv: staging
-  currenTest: 1-getting-started
+  currenTest: ${{ github.event.inputs.currentTest }}
 
 jobs:
   build-cypress-matrix:
