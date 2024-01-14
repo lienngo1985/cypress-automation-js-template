@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "e2e:started": "cypress run --browser chrome --spec cypress/e2e/1-getting-started --headed",
+    "e2e:started": "cypress run --browser chrome --spec cypress/e2e/1-getting-started",
+    "e2e:advanced": "cypress run --browser chrome --spec cypress/e2e/2-advanced-examples",
     "report:merge": "mochawesome-merge results/*.json > index.json",
     "report:generate": "marge index.json --reportDir public --assetsDir public/assets --reportPageTitle index.html"
   },

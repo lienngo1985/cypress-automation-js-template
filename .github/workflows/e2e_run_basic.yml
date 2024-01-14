@@ -1,0 +1,36 @@
+name: E2E_Run_Basic
+
+on:
+  workflow_dispatch:
+    inputs:
+      currentTest: 
+        description: 'Specify the current test you want to run'
+        default: '2-advanced-examples' 
+        type: choice
+        required: true 
+        options:
+        - 1-getting-started
+        - 2-advanced-examples
+
+env:
+  testingScope: e2e
+  #runningEnv: staging
+  currenTest: ${{ github.event.inputs.currentTest }}
+
+jobs:
+  cypress-tests:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          record: false
+          headed: true
+          browser: chrome
+          spec: cypress/e2e/${{ env.currenTest }}
+

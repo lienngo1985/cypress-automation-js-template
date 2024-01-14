@@ -27,3 +27,7 @@ Cypress.on("test:after:run", (test, runnable) => {
         addContext({ test }, screenshot);  
     }
 });
+import './commands'
+
+// Alternatively you can use CommonJS syntax:
+// require('./commands')

@@ -1,0 +1,67 @@
+name: E2E_Run_By_Matrix
+on:
+  workflow_dispatch:
+    inputs:
+      currentTest: 
+        description: 'Specify the current test you want to run'
+        default: '2-advanced-examples' 
+        type: choice
+        required: true 
+        options:
+        - 1-getting-started
+        - 2-advanced-examples
+  #schedule:
+    # run every 15 min
+    #- cron:  '*/15 2-9 * * 1-5'
+  #push:
+   # branches: [ lngo/run-e2e-1min ]
+
+env:
+  testingScope: e2e
+  #runningEnv: staging
+  currenTest: ${{ github.event.inputs.currentTest }}
+
+jobs:
+  build-cypress-matrix:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+      - id: set-spec-matrix
+        run: echo "specs=$(node scripts/readSpectoMatrix.js)" >> $GITHUB_OUTPUT
+        env:
+          DIR_PATH: 'cypress/${{ env.testingScope }}/${{ env.currenTest }}'
+    outputs:
+      specs: ${{ steps.set-spec-matrix.outputs.specs }}
+
+  e2e-run:
+    timeout-minutes: 10
+    needs: [build-cypress-matrix]
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 64
+      matrix:
+        #config:
+        #  [
+        #    {
+        #      type: 'desktop',
+        #      config: 'viewportWidth=1920,viewportHeight=1080',
+        #    }
+        #  ]
+        browser: [chrome]
+        specs: ${{ fromJson(needs.build-cypress-matrix.outputs.specs) }}
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          record: false
+          headed: true
+          browser: ${{ matrix.browser }}
+          #config: ${{ matrix.config.config }}
+          spec: ${{ matrix.specs }}
+          
+#https://dev.to/pthapa1/how-to-run-cypress-tests-in-parallel-in-github-actions-40pj
