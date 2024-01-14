@@ -30,7 +30,7 @@ jobs:
       - id: set-spec-matrix
         run: echo "specs=$(node scripts/readSpectoMatrix.js)" >> $GITHUB_OUTPUT
         env:
-          TEST_PATH: 'cypress/${{ env.testingScope }}/${{ env.currenTest }}'
+          DIR_PATH: 'cypress/${{ env.testingScope }}/${{ env.currenTest }}'
     outputs:
       specs: ${{ steps.set-spec-matrix.outputs.specs }}
 
