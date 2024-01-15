@@ -1,0 +1,156 @@
+name: E2E_Run_Mocha_Reporters
+on:
+  workflow_dispatch:
+    inputs:
+      currentTest: 
+        description: 'Specify the current test you want to run'
+        default: '2-advanced-examples' 
+        type: choice
+        required: true 
+        options:
+        - 1-getting-started
+        - 2-advanced-examples
+  #schedule:
+    # run every 15 min
+    #- cron:  '*/15 2-9 * * 1-5'
+  #push:
+   # branches: [ lngo/run-e2e-1min ]
+
+env:
+  testingScope: e2e
+  #runningEnv: staging
+  currenTest: ${{ github.event.inputs.currentTest }}
+
+jobs:
+  build-cypress-matrix:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+      - id: set-spec-matrix
+        run: echo "specs=$(node scripts/readSpectoMatrix.js)" >> $GITHUB_OUTPUT
+        env:
+          DIR_PATH: 'cypress/${{ env.testingScope }}/${{ env.currenTest }}'
+    outputs:
+      specs: ${{ steps.set-spec-matrix.outputs.specs }}
+
+  e2e-run:
+    timeout-minutes: 10
+    needs: [build-cypress-matrix]
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 64
+      matrix:
+        #config:
+        #  [
+        #    {
+        #      type: 'desktop',
+        #      config: 'viewportWidth=1920,viewportHeight=1080',
+        #    }
+        #  ]
+        browser: [chrome]
+        specs: ${{ fromJson(needs.build-cypress-matrix.outputs.specs) }}
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Remove cache reports and screenshots
+        run: |
+              rm -f results/*.xml
+              rm -f public/assets/snapshots/**/*.png
+              rm -f public/assets/snapshots/**/**/*.png
+              rm -f public/assets/snapshots/**/**/**/*.png
+        shell: bash
+              
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          record: false
+          headed: true
+          browser: ${{ matrix.browser }}
+          #config: ${{ matrix.config.config }}
+          spec: ${{ matrix.specs }}
+
+      - name: Put Mocha test results (.json) into one place
+        run: |
+          cp -R results/.jsons/*.json results/      
+   
+      - name: Save build folder
+        if: always()
+        continue-on-error: true            
+        uses: actions/upload-artifact@v4.1.0
+        with:
+          name: ${{matrix.specs }}
+          path: |
+                results
+                results/.json
+                **/*(failed)*.png 
+
+  get-artifact-to-generate-html-report:
+    if: always()
+    needs: [e2e-run]
+    runs-on: ubuntu-latest
+    #container: cypress/browsers:node12.18.3-chrome89-ff86
+    steps:
+      - uses: actions/checkout@v4
+      - name: Retrieve saved reports and screenshots from Docker containers
+        uses: actions/download-artifact@v4.1.1
+        #with:
+          #path: results   
+          
+      - name: Copy all JSON files and failed snapshots to the same folder
+        run: |
+              mkdir htmlreport
+              find ./ -name 'CyHTMLReport_*.json' -exec cp -prv '{}' 'htmlreport' ';'
+              
+              if [[ -n $(find ./ -name '*(failed)*.png') ]]; then
+                readarray -t FILES <<< "$(find ./ -name '*(failed)*.png')"
+                mkdir -v htmlreport/public
+                mkdir -v htmlreport/public/assets
+                mkdir -v htmlreport/public/assets/snapshots
+                for f in "${FILES[@]}"
+                do
+                  echo "Working on file : $f"
+                  filename=${f##*/};
+                  echo "- filename: $filename"
+                  echo "- first filename part: ${filename%% -- *}"
+                  echo "- last filename part : ${filename##* -- }"
+                  echo ""
+                  rename_last_part="${f//${filename%% -- *} -- /}"
+                  echo "- new rename_last_part: $rename_last_part"
+                  echo ""
+                  echo "--------------------"
+                  mv -- "$f" "$rename_last_part"
+                done
+                cp -R *spec.js/public/assets/snapshots/. htmlreport/public/assets/snapshots
+              fi
+        shell: bash
+          
+      - name: Merge test results into one
+        working-directory: htmlreport
+        run: |
+          npx mochawesome-merge *.json > index.json
+        
+      - name: Generate HTML report
+        working-directory: htmlreport
+        run: |
+          npx mochawesome-report-generator index.json --reportDir public --assetsDir public/assets --reportPageTitle index.html
+        
+      #- name: Deploy report page
+      #  uses: peaceiris/actions-gh-pages@v3
+      #  with:
+      #    github_token: ${{ secrets.GITHUB_TOKEN }}
+      #    publish_dir: ./htmlreport/public
+          
+      - name: Save build folder
+        if: always()
+        continue-on-error: true
+        uses: actions/upload-artifact@v4.1.0
+        with:
+          name: "HTMLREPORT-${{env.runningEnv}}_${{env.testingScope}}_${{env.currenTest}}"
+          path: |
+                htmlreport/public
+          
+#https://dev.to/pthapa1/how-to-run-cypress-tests-in-parallel-in-github-actions-40pj
