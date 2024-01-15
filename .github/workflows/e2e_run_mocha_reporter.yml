@@ -13,8 +13,8 @@ on:
   #schedule:
     # run every 15 min
     #- cron:  '*/15 2-9 * * 1-5'
-  push:
-    branches: [ mochawesome-reporter ]
+ # push:
+  #  branches: [ mochawesome-reporter ]
 
 env:
   testingScope: e2e
@@ -75,7 +75,7 @@ jobs:
 
       - name: Put Mocha test results (.json) into one place
         run: |
-          cp -R results/.jsons/*.json results/      
+          cp -R /home/runner/work/cypress-automation-js-template/cypress-automation-js-template/results/.jsons/*.json results/      
    
       - name: Save build folder
         if: always()
