@@ -4,7 +4,7 @@ on:
     inputs:
       currentTest: 
         description: 'Specify the current test you want to run'
-        default: '2-advanced-examples' 
+        default: '1-getting-started' 
         type: choice
         required: true 
         options:
@@ -13,8 +13,8 @@ on:
   #schedule:
     # run every 15 min
     #- cron:  '*/15 2-9 * * 1-5'
- # push:
-  #  branches: [ mochawesome-reporter ]
+  push:
+    branches: [ mochawesome-reporter ]
 
 env:
   testingScope: e2e
