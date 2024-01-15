@@ -13,8 +13,8 @@ on:
   #schedule:
     # run every 15 min
     #- cron:  '*/15 2-9 * * 1-5'
-  #push:
-   # branches: [ lngo/run-e2e-1min ]
+  push:
+    branches: [ mochawesome-reporter ]
 
 env:
   testingScope: e2e
