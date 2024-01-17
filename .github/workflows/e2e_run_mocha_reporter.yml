@@ -76,18 +76,13 @@ jobs:
     #  - name: Put Mocha test results (.json) into one place
     #    run: |
     #      cp -R /home/runner/work/cypress-automation-js-template/cypress-automation-js-template/cypress/results/*.json cypress/results/mochawesome-report      
-
-      - name: Extract Spec Filename
-        run: |
-          file_path="${{ matrix.specs }}"
-          filename=$(basename "$file_path")
    
       - name: Save build folder
         if: always()
         continue-on-error: true            
         uses: actions/upload-artifact@v4.1.0
         with:
-          name: ${{ filename }}
+          name: ${{ basename(matrix.specs) }}
           path: |
                 cypress/results
                 cypress/screenshots/*(failed)*.png 
