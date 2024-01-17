@@ -78,6 +78,8 @@ jobs:
     #      cp -R /home/runner/work/cypress-automation-js-template/cypress-automation-js-template/cypress/results/*.json cypress/results/mochawesome-report      
 
       - name: Extract Filename
+        if: always()
+        continue-on-error: true
         run: |
           filename=$(basename "${{ matrix.specs }}")
           echo "FILENAME=${filename}" >> $GITHUB_ENV
