@@ -130,7 +130,7 @@ jobs:
                   echo "--------------------"
                   mv -- "$f" "$rename_last_part"
                 done
-                cp -R *spec.js/public/assets/snapshots/. htmlreport/public/assets/snapshots
+                cp -R screenshots/. htmlreport/public/assets/snapshots
               fi
         shell: bash
           
