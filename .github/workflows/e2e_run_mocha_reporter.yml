@@ -58,7 +58,7 @@ jobs:
         
       - name: Remove cache reports and screenshots
         run: |
-              rm -f results/*.xml
+              rm -f cypress/results/*.xml
               rm -f public/assets/snapshots/**/*.png
               rm -f public/assets/snapshots/**/**/*.png
               rm -f public/assets/snapshots/**/**/**/*.png
@@ -73,9 +73,9 @@ jobs:
           #config: ${{ matrix.config.config }}
           spec: ${{ matrix.specs }}
 
-      - name: Put Mocha test results (.json) into one place
-        run: |
-          cp -R /home/runner/work/cypress-automation-js-template/cypress-automation-js-template/results/.jsons/*.json results/      
+    #  - name: Put Mocha test results (.json) into one place
+    #    run: |
+    #      cp -R /home/runner/work/cypress-automation-js-template/cypress-automation-js-template/cypress/results/*.json cypress/results/mochawesome-report      
    
       - name: Save build folder
         if: always()
@@ -84,9 +84,8 @@ jobs:
         with:
           name: ${{matrix.specs }}
           path: |
-                results
-                results/.json
-                **/*(failed)*.png 
+                cypress/results
+                cypress/screenshots/*(failed)*.png 
 
   get-artifact-to-generate-html-report:
     if: always()
