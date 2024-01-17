@@ -116,20 +116,6 @@ jobs:
                 mkdir -v htmlreport/public
                 mkdir -v htmlreport/public/assets
                 mkdir -v htmlreport/public/assets/snapshots
-                for f in "${FILES[@]}"
-                do
-                  echo "Working on file : $f"
-                  filename=${f##*/};
-                  echo "- filename: $filename"
-                  echo "- first filename part: ${filename%% -- *}"
-                  echo "- last filename part : ${filename##* -- }"
-                  echo ""
-                  rename_last_part="${f//${filename%% -- *} -- /}"
-                  echo "- new rename_last_part: $rename_last_part"
-                  echo ""
-                  echo "--------------------"
-                  mv -- "$f" "$rename_last_part"
-                done
                 cp -R ./*cy.js/screenshots/* htmlreport/public/assets/snapshots
               fi
         shell: bash
