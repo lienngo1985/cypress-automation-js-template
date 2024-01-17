@@ -92,7 +92,7 @@ jobs:
           name: ${{ env.FILENAME }}
           path: |
                 cypress/results
-                cypress/screenshots/*(failed)*.png 
+                cypress/screenshots
 
   get-artifact-to-generate-html-report:
     if: always()
