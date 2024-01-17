@@ -79,15 +79,15 @@ jobs:
 
       - name: Extract Filename
         run: |
-          file_path="${{ matrix.specs }}"
-          echo "filename=$(basename \"$file_path\")" >> $GITHUB_ENV
+          filename=$(basename "${{ matrix.specs }}")
+          echo "FILENAME=${filename}" >> $GITHUB_ENV
    
       - name: Save build folder
         if: always()
         continue-on-error: true            
         uses: actions/upload-artifact@v4.1.0
         with:
-          name: ${{ env.filename }}
+          name: ${{ env.FILENAME }}
           path: |
                 cypress/results
                 cypress/screenshots/*(failed)*.png 
