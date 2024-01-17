@@ -19,7 +19,7 @@ on:
 env:
   testingScope: e2e
   #runningEnv: staging
-  currenTest: 1-getting-started
+  currenTest: 2-advanced-examples
 
 jobs:
   build-cypress-matrix:
