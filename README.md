@@ -99,3 +99,6 @@ Customize paths and filenames in the script as per your project structure.
  - cypress/results: Contains XML files and other artifacts from Cypress runs.
  - cypress/screenshots: Screenshots captured during the test run.
  - HTMLREPORT-<runningEnv>_<testingScope>_<currenTest>: The generated HTML report.
+
+<img width="1219" alt="image" src="https://github.com/lienngo1985/cypress-automation-js-template/assets/68629906/82984028-e9f6-4b02-a4d8-8efa90562326">
+
