@@ -46,26 +46,49 @@ This GitHub Actions workflow is designed to run end-to-end tests using Cypress a
 
 ## Cypress Configuration
 
-- Ensure your Cypress configuration includes the Mochawesome reporter.
+ - Ensure your Cypress configuration includes the Mochawesome reporter.
 
-  Example (`cypress.json`):
-  ```json
+`cypress.config.js`
+  ```
   {
     "reporter": "mochawesome",
     "reporterOptions": {
       "reportDir": "cypress/results/mochawesome-report"
     }
   }
-Include the following code in your cypress/support/e2e.js file to show images for failure tests in the report:
+```
 
-javascript
-Copy code
+`reporter.config.json`
+```
+{
+    "reporterEnabled": "mochawesome, mocha-junit-reporter",
+
+    "reporterOptions": {
+        "overwrite": false,
+        "reportFilename": "CyHTMLReport_[status]-[datetime]-[name]",
+        "reportDir": "cypress/results",
+        "reportPageTitle": "HTML Report",
+        "timestamp": "longDate",
+        "html": false,
+        "json": true
+    },
+
+    "mochaJunitReporterReporterOptions": {
+        "mochaFile": "cypress/results/cypress-report-[hash].xml",
+        "toConsole": true
+    }
+}
+```
+
+ - Include the following code in your cypress/support/e2e.js file to show images for failure tests in the report:
+```
 Cypress.on("test:after:run", (test, runnable) => {  
     if (test.state === "failed") {    
         const screenshot = `assets/snapshots/${Cypress.spec.name}/${runnable.parent.title} -- ${test.title} (failed).png`;    
         addContext({ test }, screenshot);  
     }
 });
+```
 
 ## Workflow Customization
  - The workflow is configured to run end-to-end tests for a specific test case.
