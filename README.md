@@ -39,6 +39,10 @@ This GitHub Actions workflow is designed to run end-to-end tests using Cypress a
 - [Cypress](https://docs.cypress.io/guides/getting-started/installing-cypress.html): Make sure Cypress is installed in your project.
 
 - [Mochawesome](https://github.com/adamgruber/mochawesome): Configure Mochawesome as your test reporter.
+Add Mochawesome to your project:
+```
+npm install --save-dev mochawesome
+```
 
 ## Cypress Configuration
 
