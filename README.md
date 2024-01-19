@@ -1,8 +1,4 @@
 
-Certainly! Below is an extended version of the README template that includes information about dependencies, configuration, and the additional code for showing images in the Mochawesome report for failed tests:
-
-markdown
-Copy code
 # E2E Run with Mochawesome HTML Reporters
 
 This GitHub Actions workflow is designed to run end-to-end tests using Cypress and generate a Mochawesome HTML report. It includes steps to run the tests, extract relevant information, and create an HTML report for easy analysis.
