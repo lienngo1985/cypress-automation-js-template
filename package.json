@@ -6,11 +6,15 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "e2e:started": "cypress run --browser chrome --spec cypress/e2e/1-getting-started",
-    "e2e:advanced": "cypress run --browser chrome --spec cypress/e2e/2-advanced-examples"
+    "e2e:advanced": "cypress run --browser chrome --spec cypress/e2e/2-advanced-examples",
+    "demo:applitools": "cypress run --browser chrome --spec cypress/e2e/2-advanced-examples/demo_appli_tools.cy.js --headed"
   },
   "author": "Lien Ngo",
   "license": "ISC",
   "devDependencies": {
     "cypress": "^13.6.1"
+  },
+  "dependencies": {
+    "@applitools/eyes-cypress": "^3.40.6"
   }
 }
