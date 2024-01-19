@@ -1,46 +1,73 @@
-# Cypress E2E Tests
-This repository contains end-to-end (E2E) tests for Sample UI Tests. The tests are written using [Cypress](https://cypress.io/), a powerful JavaScript end-to-end testing framework.
+# Using Applitools with Cypress
+## Overview
+This document provides step-by-step instructions for integrating Applitools with Cypress for visual testing. Applitools is a visual testing and monitoring platform that helps automate visual validation of web applications.
 
 ## Prerequisites
-Node.js and npm installed on your machine. You can download them from https://nodejs.org/.
-Git installed on your machine. You can download it from https://git-scm.com/.
-## Getting Started
-### 1. Clone the Repository
-```
-git clone https://github.com/lienngo1985/cypress-automation-js-template.git
-cd cypress-automation-js-template
-```
-### 2. Install Dependencies
-```
-npm install
-```
-### 3. Configure Cypress
-Run Cypress open to configure Cypress and set up your cypress.json file:
+ - [Cypress](https://www.cypress.io/)
+ - [Node.js](https://nodejs.org/en)
+ - [Applitools Account](https://applitools.com/)
 
+## Installation
+**1. Install Applitools Eyes Cypress SDK:**
+```bash
+   npm install @applitools/eyes-cypress
 ```
-npx cypress open
+**2. Set Applitools API Key:**
+ - Sign up for an Applitools account and obtain your API key.
+ - Configure Applitools in your Cypress configuration.
+ - Example Cypress configuration (cypress.config.js):
 ```
-Choose your testing type when prompted (e.g., "e2e").
-
-### 4. Run Cypress Tests
-To run Cypress tests in headless mode:
-
+  require('@applitools/eyes-cypress')(module);
 ```
-npx cypress run --headless
+**3. Import applitools commands:**
+Example of commands (cypress/support/e2e.js):
 ```
-To open Cypress Test Runner for interactive test execution:
-
+  import '@applitools/eyes-cypress/commands'
 ```
-npx cypress open
+**4. Create Applitools Configuration File:**
+ - Create an Applitools configuration file (e.g., applitools.config.js) to customize visual testing settings.
+ - Set the API key as an environment variable in your project
+ - Example applitools.config.js:
 ```
-## Customizing Cypress Configuration
-You can customize the Cypress configuration in the cypress.json file. For more information on configuration options, refer to the [Cypress Configuration Documentation](https://docs.cypress.io/guides/references/configuration).
+  module.exports = {
+      testConcurrency: 5,
+      apiKey: 'your-api-key',
+      batchName: 'Cypress Learning',
+      browser: [
+          {width: 800, height: 600, name: 'chrome'},
+          {width: 1600, height: 1200, name: 'firefox'},
+          {width: 1024, height: 768, name: 'safari'},
+          {deviceName: 'Pixel 2', screenOrientation: 'portrait'},
+          {deviceName: 'Nexus 10', screenOrientation: 'landscape'},
+      ]
+  }
+```
 
-## Writing and Organizing Tests
-Cypress tests are located in the cypress/e2e directory. You can organize your tests into subdirectories based on your project structure.
+## Writing Visual Tests with Applitools
+ - In your Cypress test scripts, use the Applitools commands to capture and compare visual snapshots.
+ - Example Cypress test script 
+```
+  it('should display homepage', function () {
+    cy.visit('/');
+    cy.eyesOpen({
+      appName: 'Your App Name',
+      testName: 'Homepage Test',
+    });
+    cy.eyesCheckWindow('Homepage');
+    cy.eyesClose();
+  });
+```
 
-For information on writing tests, check the [Cypress Documentation]([https://docs.cypress.io/guides/overview/why-cypress](https://docs.cypress.io/guides/end-to-end-testing/writing-your-first-end-to-end-test).
+## Running Cypress Tests with Applitools
+Run your Cypress tests as usual, and Applitools will capture and compare visual snapshots.
+```
+npx cypress run --browser chrome --spec cypress/e2e/2-advanced-examples/demo_appli_tools.cy.js --headed
+```
 
-## Additional Information
-[Cypress Documentation](https://docs.cypress.io/guides/overview/why-cypress)https://docs.cypress.io/guides/overview/why-cypress
-[GitHub Actions Documentation](https://docs.cypress.io/guides/continuous-integration/github-actions)https://docs.cypress.io/guides/continuous-integration/github-actions
+## Viewing Results on Applitools Dashboard
+After running the tests, view the visual test results on the Applitools dashboard, where you can analyze and manage visual differences.
+https://eyes.applitools.com/app/test-results/00000251696627368355/?accountId=g_iQiqr3IEKNtI6lNwlhYQ__
+![image](https://github.com/lienngo1985/cypress-automation-js-template/assets/68629906/ac37ff0e-905d-4eca-8ea0-f2ae2df80b10)
+
+<img width="1559" alt="image" src="https://github.com/lienngo1985/cypress-automation-js-template/assets/68629906/57e24a73-c84c-477f-ac0b-cba32dbbc3f7">
+
