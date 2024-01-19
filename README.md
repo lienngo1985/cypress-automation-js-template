@@ -1,46 +1,78 @@
-# Cypress E2E Tests
-This repository contains end-to-end (E2E) tests for Sample UI Tests. The tests are written using [Cypress](https://cypress.io/), a powerful JavaScript end-to-end testing framework.
 
-## Prerequisites
-Node.js and npm installed on your machine. You can download them from https://nodejs.org/.
-Git installed on your machine. You can download it from https://git-scm.com/.
-## Getting Started
-### 1. Clone the Repository
-```
-git clone https://github.com/lienngo1985/cypress-automation-js-template.git
-cd cypress-automation-js-template
-```
-### 2. Install Dependencies
-```
-npm install
-```
-### 3. Configure Cypress
-Run Cypress open to configure Cypress and set up your cypress.json file:
+Certainly! Below is an extended version of the README template that includes information about dependencies, configuration, and the additional code for showing images in the Mochawesome report for failed tests:
 
-```
-npx cypress open
-```
-Choose your testing type when prompted (e.g., "e2e").
+markdown
+Copy code
+# E2E Run with Mochawesome HTML Reporters
 
-### 4. Run Cypress Tests
-To run Cypress tests in headless mode:
+This GitHub Actions workflow is designed to run end-to-end tests using Cypress and generate a Mochawesome HTML report. It includes steps to run the tests, extract relevant information, and create an HTML report for easy analysis.
 
-```
-npx cypress run --headless
-```
-To open Cypress Test Runner for interactive test execution:
+## Workflow Overview
 
-```
-npx cypress open
-```
-## Customizing Cypress Configuration
-You can customize the Cypress configuration in the cypress.json file. For more information on configuration options, refer to the [Cypress Configuration Documentation](https://docs.cypress.io/guides/references/configuration).
+1. **Build Cypress Matrix**: 
+   - Check out the code.
+   - Run a script to generate a matrix of Cypress specs.
 
-## Writing and Organizing Tests
-Cypress tests are located in the cypress/e2e directory. You can organize your tests into subdirectories based on your project structure.
+2. **E2E Run**:
+   - Run end-to-end tests using Cypress.
+   - Remove cache reports and screenshots.
+   - Extract test filename.
+   - Upload test results and screenshots as artifacts.
 
-For information on writing tests, check the [Cypress Documentation]([https://docs.cypress.io/guides/overview/why-cypress](https://docs.cypress.io/guides/end-to-end-testing/writing-your-first-end-to-end-test).
+3. **Generate HTML Report**:
+   - Download test results and screenshots artifacts.
+   - Copy JSON files and failed snapshots to the `htmlreport` directory.
+   - Merge test results into one JSON file.
+   - Generate an HTML report using Mochawesome.
 
-## Additional Information
-[Cypress Documentation](https://docs.cypress.io/guides/overview/why-cypress)https://docs.cypress.io/guides/overview/why-cypress
-[GitHub Actions Documentation](https://docs.cypress.io/guides/continuous-integration/github-actions)https://docs.cypress.io/guides/continuous-integration/github-actions
+4. **Save HTML Report**:
+   - Upload the generated HTML report as an artifact.
+
+## How to Use
+
+1. **Run Workflow**:
+   - Trigger the workflow manually or on a schedule.
+   - Specify the test you want to run.
+
+2. **Review Artifacts**:
+   - After the workflow completes, go to the Actions tab.
+   - Download artifacts to review test results and the HTML report.
+
+## Dependencies
+
+- [Cypress](https://docs.cypress.io/guides/getting-started/installing-cypress.html): Make sure Cypress is installed in your project.
+
+- [Mochawesome](https://github.com/adamgruber/mochawesome): Configure Mochawesome as your test reporter.
+
+## Cypress Configuration
+
+- Ensure your Cypress configuration includes the Mochawesome reporter.
+
+  Example (`cypress.json`):
+  ```json
+  {
+    "reporter": "mochawesome",
+    "reporterOptions": {
+      "reportDir": "cypress/results/mochawesome-report"
+    }
+  }
+Include the following code in your cypress/support/e2e.js file to show images for failure tests in the report:
+
+javascript
+Copy code
+Cypress.on("test:after:run", (test, runnable) => {  
+    if (test.state === "failed") {    
+        const screenshot = `assets/snapshots/${Cypress.spec.name}/${runnable.parent.title} -- ${test.title} (failed).png`;    
+        addContext({ test }, screenshot);  
+    }
+});
+
+## Workflow Customization
+ - The workflow is configured to run end-to-end tests for a specific test case.
+ - Modify the matrix in e2e-run to include different browsers or configurations if needed.
+Customize paths and filenames in the script as per your project structure.
+
+## Artifacts
+ - cypress/results: Contains XML files and other artifacts from Cypress runs.
+ - cypress/screenshots: Screenshots captured during the test run.
+ - HTMLREPORT-<runningEnv>_<testingScope>_<currenTest>: The generated HTML report.
