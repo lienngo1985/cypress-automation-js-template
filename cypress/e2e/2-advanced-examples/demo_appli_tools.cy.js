@@ -51,3 +51,6 @@ describe('Visual Test With Applitools', () => {
         cy.eyesClose()
     })
 });
+
+// We can now check the result from the AppliTools dashboard
+// https://eyes.applitools.com/app/test-results/00000251696627368355/?accountId=g_iQiqr3IEKNtI6lNwlhYQ__
